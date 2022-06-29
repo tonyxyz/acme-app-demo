@@ -1,0 +1,26 @@
+*.swp
+package-lock.json
+.pytest_cache
+*.egg-info
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.vscode
+
+# CDK Context & Staging files
+.cdk.staging/
+cdk.out/
+
+# mac finder
+.DS_Store
