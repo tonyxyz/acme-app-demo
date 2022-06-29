@@ -159,6 +159,7 @@ Users will receive a sign up email from the user pool and can also receive forgo
 In application_stack.py create_user_pool() is the method that creates this.
 
 [UserPool CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_cognito/UserPool.html)
+
 [UserPool CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html)
 
 ### User Pool Domain and Hosted HTML
@@ -170,6 +171,7 @@ The hosted HTML is not very flexible and probably won't be a good fit for a well
 It can be useful during testing and development though.
 
 [UserPoolDomain CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_cognito/UserPoolDomain.html)
+
 [UserPoolDomain CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooldomain.html)
 
 ### User Pool Client
@@ -189,6 +191,7 @@ You should review your security requirements.
 Notice that CDK does not always allow the fine grained control that CFN does.  In this case we need to access features in the underlying CFN to change the ExplicitAuthFlows.
 
 [UserPoolClient CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_cognito/UserPoolClient.html)
+
 [UserPoolClient CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html)
 
 ### DynamoDB Table
@@ -208,6 +211,7 @@ The functional content of a record is provided in an unindexed field named 'Doc'
 Only the Doc field is returned via the user-facing API methods.
 
 [DynamoDB Table CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_dynamodb/Table.html)
+
 [DynamoDB Table CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html)
 
 ### RestAPI
@@ -221,6 +225,7 @@ There is a 4xx response attached to the RestAPI to allow the gateway to return e
 API Gateway objects are released using Stage and Deployment objects. If you are tweaking an API Gateway in the console you need to think about these objects but in the normal course of events CDK just takes care of them. You can see them in the stack in the console.
 
 [API Gateway Rest API CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html)
+
 [API Gateway Rest API CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_apigateway/RestApi.html)
 
 #### CognitoUserPoolsAuthorizer
@@ -230,6 +235,7 @@ The authorizer accepts or rejects a request to a gateway method by checking the 
 This reads slightly differently in CDK and CFN. CDK provides a specific CognitoUserPoolsAuthorizer class but what it generates in CFN is an APIGateway::Authorizer resource with the type set to COGNITO_USER_POOLS.
 
 [APIGateway Authorizer CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html)
+
 [CognitoUserPoolsAuthorizer CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_apigateway/CognitoUserPoolsAuthorizer.html)
 
 #### Gateway Resource
@@ -245,6 +251,7 @@ There is no corresponding helper method in the explicit Method object.
 The approach we have taken here is to use the cors preflight method to lock down the allowed origins and then just return '*' on the Method objects. It should be possible to replicate the add_cors_preflight() implementation on the Method objects if your security model requires that degree of control.
 
 [APIGateway Resource CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_apigateway/Resource.html)
+
 [APIGateway Resource CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-resource.html)
 
 #### Gateway Resource Methods
@@ -270,6 +277,7 @@ So we can take a GET request like `www.acmeappdemo.com/user-data?type=LOG&from=1
 Notice also the `$util.escapeJavaScript()` calls in those templates to head off any attempt at injection attacks on those HTTP parameters.
 
 [Method CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_apigateway/Method.html#)
+
 [Method CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html)
 
 #### Lambda Functions
@@ -281,13 +289,16 @@ We also pass in the permitted record types for each operation.  So for instance,
 Notice we create an execution role for the two lambdas that gives them basic lambda execution permissions and the right to call 'PutItem' and 'Query' on our own Table object ... and nothing else. If you wanted to be super tight with your security model you could even break this in two so only the read lambda is allowed to Query and only the write lambda is allowed to PutItem.
 
 [Lambda Function CDK docs](https://docs.aws.amazon.com/cdk/api/v1/python/aws_cdk.aws_lambda/Function.html)
+
 [Lambda Function CFN docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)
 
 ## And Finally
 
+You may notice there is no functionality in the test client for a user to create their own account. In tunasoniq.io we only create user accounts in the backend in response to receiving a subscription. You should find it easy enough to add end user onboarding if required.
+
 There are bound to be things I have missed or could do better in the stack.  Feel free to get in touch with suggestions and/or hot-takes.
 
-You can find me swearing about politics on Twitter as @NoIAmTonyGreen.  You can also find me on [LinkedIn](https://www.linkedin.com/in/tony-green-8639616/).  Or you could even send a pull request.
+You can find me, mostly swearing about politics, on Twitter as @NoIAmTonyGreen.  You can also find me on [LinkedIn](https://www.linkedin.com/in/tony-green-8639616/).  Or you could even send a pull request.
 
 
 
